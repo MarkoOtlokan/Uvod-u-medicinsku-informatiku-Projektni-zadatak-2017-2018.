@@ -1,6 +1,6 @@
 import sys
-sys.path.append('./Test')
 from Test import Test
+from Gui_main import main
 
 if __name__ == '__main__':
-    Test()
+    main()
