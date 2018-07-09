@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<patiente xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="patient.xsd">
+  <patient LBO="12312312312">
+    <name>sdfsara</name>
+    <surname>Niddddc</surname>
+    <date_of_birth>2001</date_of_birth>
+  </patient>
+  <patient LBO="12345678912">
+    <name>Sara</name>
+    <surname>Nikolic</surname>
+    <date_of_birth>2000</date_of_birth>
+  </patient>
+</patiente>
