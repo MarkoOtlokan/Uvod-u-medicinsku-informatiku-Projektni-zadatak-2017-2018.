@@ -11,13 +11,18 @@ def Test():
     patiente = {}
     patiente[sara.LBO] = sara
     patiente[greg.LBO] = greg
+
+    for p in patiente:
+        print()
+        print(p)
+
+    print("===============")
+
     Patient.saveXML(patiente)
 
-    print("proslo")
-
-    print()
-    print("ucitavanje...")
     patiente = Patient.readXML()
 
     for patientElement in patiente:
         print (patientElement.name)
+    greg = Patient(12312312317, 'sdfsara', 'Niddddc', 2001)
+    Patient.addNewPatient(greg)

@@ -161,3 +161,29 @@ class Patient(object):
 
         patient = _class(LBO, name, surname, date_of_birth)
         return patient
+
+
+    def element_class(element):
+        tmp = Patient(element.LBO,element.name,element.surname, element.date_of_birth)
+        return (tmp)
+
+    def xmlToList():
+        patiente = Patient.readXML()
+
+        print("prosao")
+        listOfPatiente = {}
+        for patient in patiente:
+            tmp = Patient.element_class(patient)
+            listOfPatiente[int(tmp.LBO)] = tmp
+
+        return listOfPatiente
+
+
+    def addNewPatient(patient):
+        patiente = Patient.xmlToList()
+        patiente[patient.LBO] = patient
+        for p in patiente:
+            print(p)
+            print()
+        Patient.saveXML(patiente)
+        return ("suc")

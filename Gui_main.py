@@ -6,7 +6,6 @@ sys.path.append('../Patient.py')
 from Patient import Patient
 
 class Main(tkinter.Frame):
-    patiente = Patient.readXML()
     '''
     classdocs
     '''
@@ -14,12 +13,15 @@ class Main(tkinter.Frame):
         '''
         Constructor
         '''
+        self.patiente = []
+        self.patienteKeys=[]
         tkinter.Frame.__init__(self, parent)
         self.parent=parent
 
         self.initialize_user_interface()
 
     def initialize_user_interface(self):
+        self.patiente = Patient.readXML() # stoji ovde zbog update
         """Draw a user interface allowing the user to type
         items and insert them into the treeview
         """
@@ -56,7 +58,7 @@ class Main(tkinter.Frame):
     def showInsert(self):
         self.parent.withdraw()
         self.newWindow = tkinter.Toplevel(self.parent)
-        bb = AddNew(self.newWindow, Main)
+        bb = AddNew(self.newWindow, Main, self.patienteKeys)
 
 
     def insert_data(self):
@@ -64,7 +66,7 @@ class Main(tkinter.Frame):
         Insertion method.
         """
         for patientElement in self.patiente:
-
+            self.patienteKeys.append(patientElement.LBO)
             self.tree.insert('', '0', values=(patientElement.surname,patientElement.name,patientElement.LBO))
         self.tree.bind('<<TreeviewSelect>>', self.OnClick)
 
@@ -87,9 +89,12 @@ class Main(tkinter.Frame):
         self.dose_label.grid(row = 3, column = 2, sticky = tkinter.W)
         self.dose_label = tkinter.Label(self.parent, text = "Datum rodjenja:" + str(patient.date_of_birth))
         self.dose_label.grid(row = 4, column = 2, sticky = tkinter.W)
+        self.submit_button = tkinter.Button(self.parent, text = "pregledi", command = lambda: self.goToPregledi(patient.LBO))
+        self.submit_button.grid(row = 5, column = 2, sticky = tkinter.W)
 
-        print(patient.surname)
 
+    def goToPregledi(self,LBO):
+        print(LBO)
 
 
 def main():
