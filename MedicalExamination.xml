@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<MedicalExamination xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="MedicalExamination.xsd">
+  <MedicalExamination id="12345">
+    <patient_LBO>17162739481</patient_LBO>
+    <date>2013-04-29T04:16:49.792-04:00</date>
+    <type>pregled</type>
+    <report>uspesan</report>
+    <doctor>pocek</doctor>
+  </MedicalExamination>
+  <MedicalExamination id="12346">
+    <patient_LBO>17162739481</patient_LBO>
+    <date>2015-04-29T04:16:49.792-04:00</date>
+    <type>pregled</type>
+    <report>ne uspesan</report>
+    <doctor>pocek</doctor>
+  </MedicalExamination>
+  <MedicalExamination id="12349">
+    <patient_LBO>17162722281</patient_LBO>
+    <date>2015-04-29T04:16:49.792-04:00</date>
+    <type>pregled</type>
+    <report>ne uspesan</report>
+    <doctor>pocek</doctor>
+  </MedicalExamination>
+</MedicalExamination>

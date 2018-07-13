@@ -56,7 +56,6 @@ class Patient(object):
         self.__name = name
         self.__surname = surname
         self.__date_of_birth = date_of_birth
-        self.__medical_examination = []
 
     def __str__(self):
         return "\n".join([
@@ -69,9 +68,6 @@ class Patient(object):
         for i in self.__medical_examination:
             print(i)
 
-
-    def addExamination(self, examination):
-        self.medical_examination.append(examination)
 
     def __eq__(self, other):
         return self.__LBO == other.__LBO
@@ -93,10 +89,8 @@ class Patient(object):
 
     @classmethod
     def saveXML(_class, patiente):
-        # namespace-ovi se organizuju u rečnik
         namespaces = {"xsi" : "http://www.w3.org/2001/XMLSchema-instance"}
         # nazivi elemenata/atributa sa namespace prefiksom se moraju navesti u formatu: {staza}naziv
-        # staza odgovara stazi namespace-a u rečniku namespace-ova
         # naziv ogovara nazivu elementa/atributa
         # Element automatski zamenjuje stazu odgovarajućim namespace prefiksom navedenim u rečniku namespace-ova
         attributes = {"{http://www.w3.org/2001/XMLSchema-instance}noNamespaceSchemaLocation": _class.__nameSD}
@@ -187,3 +181,18 @@ class Patient(object):
             print()
         Patient.saveXML(patiente)
         return ("suc")
+
+    def changeName(patient):
+        pass
+
+    def pronadjiPreglede(patient):
+        pregledi = MedicalExamination.readXML()
+        for p in pregledi:
+            if int(p.patient_LBO) == patient.LBO:
+                print(p)
+            else:
+                print("nee")
+                print(p.patient_LBO)
+                print("ddd")
+                print(patient.LBO)
+                print("sss")

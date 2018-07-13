@@ -2,8 +2,11 @@ import sys
 from tkinter import ttk
 import tkinter
 from AddNew import AddNew
+from Change import Change
 sys.path.append('../Patient.py')
 from Patient import Patient
+
+from tkinter import messagebox
 
 class Main(tkinter.Frame):
     '''
@@ -60,6 +63,10 @@ class Main(tkinter.Frame):
         self.newWindow = tkinter.Toplevel(self.parent)
         bb = AddNew(self.newWindow, Main, self.patienteKeys)
 
+    def showChange(self,patient):
+        self.parent.withdraw()
+        self.newWindow = tkinter.Toplevel(self.parent)
+        bb = Change(self.newWindow, Main, patient)
 
     def insert_data(self):
         """
@@ -91,11 +98,33 @@ class Main(tkinter.Frame):
         self.dose_label.grid(row = 4, column = 2, sticky = tkinter.W)
         self.submit_button = tkinter.Button(self.parent, text = "pregledi", command = lambda: self.goToPregledi(patient.LBO))
         self.submit_button.grid(row = 5, column = 2, sticky = tkinter.W)
+        self.submit_button = tkinter.Button(self.parent, text = "Obrisi pacijeta", command = lambda: self.dd(patient.LBO))
+        self.submit_button.grid(row = 5, column = 2, sticky = tkinter.W)
+        self.submit_button = tkinter.Button(self.parent, text = "izmeni", command = lambda: self.showChange(patient))
+        self.submit_button.grid(row = 5, column = 3, sticky = tkinter.W)
 
 
     def goToPregledi(self,LBO):
         print(LBO)
 
+    def dd(self,lbo):
+        self.win = tkinter.Toplevel()
+        self.win.title('warning')
+        message = "Da li ste sigurni da zelite da obrisete pacijenta ?"
+        tkinter.Label(self.win, text=message).pack()
+        tkinter.Button(self.win, text='obrisi', command=lambda:self.deletePatient(lbo)).pack()
+        tkinter.Button(self.win, text='odustani', command=self.win.destroy).pack()
+
+    def deletePatient(self, LBO):
+        self.win.destroy()
+        patiente = Patient.xmlToList()
+        i = 0
+        print(patiente)
+        del patiente[int(LBO)]
+        Patient.saveXML(patiente)
+
+        messagebox.showinfo("Uspeh", "Uspesno ste obrisali pacijenta")
+        self.parent.update()
 
 def main():
     root=tkinter.Tk()
