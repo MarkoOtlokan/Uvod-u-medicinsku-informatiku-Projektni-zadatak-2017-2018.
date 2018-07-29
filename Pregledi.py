@@ -51,6 +51,7 @@ class Pregledi(tkinter.Frame):
 	def writeMedicalExamination(self,LBO):
 		self.medL = MedicalExamination.readXML()
 		for med in self.medL:
+			
 			if(med.patient_LBO == self.patient.LBO):
 				self.tree.insert('', '0', values=(med.date,med.type,med.id))
 				self.tree.bind('<<TreeviewSelect>>', self.OnClick)
