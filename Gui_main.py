@@ -5,6 +5,7 @@ from AddNew import AddNew
 from Change import Change
 sys.path.append('../Patient.py')
 from Patient import Patient
+from Pregledi import Pregledi
 
 from tkinter import messagebox
 
@@ -87,27 +88,31 @@ class Main(tkinter.Frame):
                 self.writeDataOfPatient(patient)
                 return
 
-    def writeDataOfPatient(self,patient):
-        self.dose_label = tkinter.Label(self.parent, text = "Prezime:" + patient.surname)
+    def writeDataOfPatient(self,patientC):
+        self.dose_label = tkinter.Label(self.parent, text = "Prezime:" + patientC.surname)
         self.dose_label.grid(row = 1, column = 2, sticky = tkinter.W)
-        self.dose_label = tkinter.Label(self.parent, text = "ime:" + patient.name)
+        self.dose_label = tkinter.Label(self.parent, text = "ime:" + patientC.name)
         self.dose_label.grid(row = 2, column = 2, sticky = tkinter.W)
-        self.dose_label = tkinter.Label(self.parent, text = "LBO:" + patient.LBO)
+        self.dose_label = tkinter.Label(self.parent, text = "LBO:" + patientC.LBO)
         self.dose_label.grid(row = 3, column = 2, sticky = tkinter.W)
-        self.dose_label = tkinter.Label(self.parent, text = "Datum rodjenja:" + str(patient.date_of_birth))
+        self.dose_label = tkinter.Label(self.parent, text = "Datum rodjenja:" + str(patientC.date_of_birth))
         self.dose_label.grid(row = 4, column = 2, sticky = tkinter.W)
-        self.submit_button = tkinter.Button(self.parent, text = "pregledi", command = lambda: self.goToPregledi(patient.LBO))
+        self.submit_button = tkinter.Button(self.parent, text = "pregledi", command = lambda: self.goToPregledi(patientC.LBO))
         self.submit_button.grid(row = 5, column = 2, sticky = tkinter.W)
-        self.submit_button = tkinter.Button(self.parent, text = "Obrisi pacijeta", command = lambda: self.dd(patient.LBO))
+        self.submit_button = tkinter.Button(self.parent, text = "Obrisi pacijeta", command = lambda: self.dPatient(patientC.LBO))
         self.submit_button.grid(row = 5, column = 2, sticky = tkinter.W)
-        self.submit_button = tkinter.Button(self.parent, text = "izmeni", command = lambda: self.showChange(patient))
+        self.submit_button = tkinter.Button(self.parent, text = "izmeni", command = lambda: self.showChange(patientC))
+        self.submit_button.grid(row = 5, column = 3, sticky = tkinter.W)
+        self.submit_button = tkinter.Button(self.parent, text = "pregledi", command = lambda: self.goToPregledi(patientC))
         self.submit_button.grid(row = 5, column = 3, sticky = tkinter.W)
 
 
-    def goToPregledi(self,LBO):
-        print(LBO)
+    def goToPregledi(self, patientC):
+        self.parent.withdraw()
+        self.newWindow = tkinter.Toplevel(self.parent)
+        bb = Pregledi(self.newWindow, Main, patientC)
 
-    def dd(self,lbo):
+    def dPatient(self,lbo):
         self.win = tkinter.Toplevel()
         self.win.title('warning')
         message = "Da li ste sigurni da zelite da obrisete pacijenta ?"
@@ -119,12 +124,10 @@ class Main(tkinter.Frame):
         self.win.destroy()
         patiente = Patient.xmlToList()
         i = 0
-        print(patiente)
         del patiente[int(LBO)]
         Patient.saveXML(patiente)
-
+        self.initialize_user_interface()
         messagebox.showinfo("Uspeh", "Uspesno ste obrisali pacijenta")
-        self.parent.update()
 
 def main():
     root=tkinter.Tk()

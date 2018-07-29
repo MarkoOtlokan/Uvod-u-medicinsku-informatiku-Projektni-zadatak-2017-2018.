@@ -4,7 +4,7 @@ from lxml import etree
 class MedicalExamination(object):
     """docstring for MedicalExamination."""
 
-
+    __tipovi_pregleda = ['CT', 'MR','XA','RF', 'US','ECG']
 
     __nameSD = "MedicalExamination.xsd"
     __nameXML = "MedicalExamination.xml"
