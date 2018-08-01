@@ -6,7 +6,7 @@ from Change import Change
 sys.path.append('../Patient.py')
 from Patient import Patient
 from Pregledi import Pregledi
-
+from Call import Calendar
 from tkinter import messagebox
 
 class Main(tkinter.Frame):
@@ -104,7 +104,7 @@ class Main(tkinter.Frame):
         self.submit_button = tkinter.Button(self.parent, text = "izmeni", command = lambda: self.showChange(patientC))
         self.submit_button.grid(row = 5, column = 3, sticky = tkinter.W)
         self.submit_button = tkinter.Button(self.parent, text = "pregledi", command = lambda: self.goToPregledi(patientC))
-        self.submit_button.grid(row = 5, column = 3, sticky = tkinter.W)
+        self.submit_button.grid(row = 5, column = 4, sticky = tkinter.W)
 
 
     def goToPregledi(self, patientC):
@@ -123,7 +123,6 @@ class Main(tkinter.Frame):
     def deletePatient(self, LBO):
         self.win.destroy()
         patiente = Patient.xmlToList()
-        i = 0
         del patiente[int(LBO)]
         Patient.saveXML(patiente)
         self.initialize_user_interface()

@@ -1,19 +1,23 @@
+import calendar
+import datetime
 from tkinter import ttk
 from tkinter import messagebox
 import tkinter
 from Patient import Patient
+from Call import Calendar
 
 class AddNew(tkinter.Frame):
 
 	def __init__(self, parent, otac, patienteKeys):
 		self.patienteKeys = patienteKeys
-
+		self.data = {}
 		self.otac = otac
 		self.parent=parent
 		self.frame = tkinter.Frame(self.parent)
 		self.initialize_insert_interface()
 
 	def initialize_insert_interface(self):
+		self.v = ''
 		self.parent.title("Canvas Test")
 		self.parent.grid_rowconfigure(0,weight=1)
 		self.parent.grid_columnconfigure(0,weight=1)
@@ -34,12 +38,15 @@ class AddNew(tkinter.Frame):
 		self.date_of_birth_entry = tkinter.Entry(self.parent)
 		self.date_of_birth_label.grid(row = 4, column = 0, sticky = tkinter.W)
 		self.date_of_birth_entry.grid(row = 4, column = 1)
+		self.date_Button = ttk.Button(self.parent, text='Choose',command=self.calCal)
+		self.date_Button.grid(row = 4, column = 2)
 		self.submit_button = tkinter.Button(self.parent, text = "Insert", command = self.check)
 		self.submit_button.grid(row = 0, column = 0, sticky = tkinter.W)
 		self.exit_button = tkinter.Button(self.parent, text = "Exit", command = self.goBack)
 		self.exit_button.grid(row = 0, column = 3)
 
 	def check(self):
+		self.fillDate() # treba ga postaviti negde da cim se popuni kalendar, da se on izvrsi
 		tmpLBO = self.LBO_entry.get()
 		print(len(tmpLBO))
 		if(len(tmpLBO) != 11 or tmpLBO.isdigit() == False):
@@ -58,3 +65,10 @@ class AddNew(tkinter.Frame):
 		self.parent.withdraw()
 		self.newWindow = tkinter.Toplevel(self.parent)
 		bb = self.otac(self.newWindow)
+
+	def calCal(self):
+		child = tkinter.Toplevel()
+		cal = Calendar(child, self.data)
+
+	def fillDate(self):
+		self.date_of_birth_entry.insert(0, str(self.data['year_selected'])+"-"+str(self.data['month_selected'])+"-"+str(self.data['day_selected']))

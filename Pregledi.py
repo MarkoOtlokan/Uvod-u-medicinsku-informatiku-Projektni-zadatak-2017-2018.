@@ -31,6 +31,8 @@ class Pregledi(tkinter.Frame):
 
 		self.surname_label.grid(row = 3, column = 0, sticky = tkinter.W)
 
+		self.exit_button = tkinter.Button(self.parent, text = "dodaj pregled", command = self.addExamination)
+		self.exit_button.grid(row = 0, column = 2)
 
 		self.exit_button = tkinter.Button(self.parent, text = "Exit", command = self.goBack)
 		self.exit_button.grid(row = 0, column = 3)
@@ -48,10 +50,15 @@ class Pregledi(tkinter.Frame):
 
 		self.writeMedicalExamination(self.patient.LBO)
 
+	def addExamination(self):
+		self.parent.withdraw()
+		self.newWindow = tkinter.Toplevel(self.parent)
+		bb = dodajPregled(self.newWindow, Main, self.patient.LBO)
+
 	def writeMedicalExamination(self,LBO):
 		self.medL = MedicalExamination.readXML()
 		for med in self.medL:
-			
+
 			if(med.patient_LBO == self.patient.LBO):
 				self.tree.insert('', '0', values=(med.date,med.type,med.id))
 				self.tree.bind('<<TreeviewSelect>>', self.OnClick)

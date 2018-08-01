@@ -1,8 +1,8 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <patiente xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="patient.xsd">
-  <patient LBO="17162739481">
-    <name>moje </name>
-    <surname>novo </surname>
-    <date_of_birth>1992</date_of_birth>
+  <patient LBO="12312312312">
+    <name>wwww</name>
+    <surname>ssss</surname>
+    <date_of_birth>2018-08-03</date_of_birth>
   </patient>
 </patiente>

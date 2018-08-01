@@ -151,7 +151,7 @@ class Patient(object):
         name = element[0].text # text svojstvo objekta tipa Element je string koji odgovara sadržaju XML elementa
         #ime = element.xpath("./ime")[0].text
         surname = element[1].text
-        date_of_birth = int(element[2].text)
+        date_of_birth = element[2].text
 
         patient = _class(LBO, name, surname, date_of_birth)
         return patient

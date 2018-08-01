@@ -16,16 +16,22 @@
 									</xs:restriction>
 								</xs:simpleType>
 							</xs:element>
-							<xs:element name="date">
+							<xs:element name="datum">
 								<xs:simpleType>
-									<xs:restriction base="xs:dateTime">
+									<xs:restriction base="xs:date">
+										<xs:minInclusive value="1900-01-01"/>
 									</xs:restriction>
 								</xs:simpleType>
 							</xs:element>
 							<xs:element name="type">
 								<xs:simpleType>
 									<xs:restriction base="xs:string">
-										<xs:minLength value="2"/>
+										<xs:enumeration value="CT"/>
+										<xs:enumeration value="MR"/>
+										<xs:enumeration value="ECG"/>
+										<xs:enumeration value="XA"/>
+										<xs:enumeration value="US"/>
+										<xs:enumeration value="RF"/>
 									</xs:restriction>
 								</xs:simpleType>
 							</xs:element>
@@ -39,6 +45,13 @@
               <xs:element name="doctor">
 								<xs:simpleType>
                   <xs:restriction base="xs:string">
+										<xs:minLength value="2"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="snimak">
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
 										<xs:minLength value="2"/>
 									</xs:restriction>
 								</xs:simpleType>
