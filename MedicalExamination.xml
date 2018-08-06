@@ -1,3 +1,19 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <MedicalExamination xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="MedicalExamination.xsd">
+  <MedicalExamination id="12346">
+    <patient_LBO>17162739481</patient_LBO>
+    <date>2015-04-29</date>
+    <type>CT</type>
+    <report>ne uspesan</report>
+    <doctor>pocek</doctor>
+    <dicom>neka putanja</dicom>
+  </MedicalExamination>
+  <MedicalExamination id="1847602862">
+    <patient_LBO>11111111111</patient_LBO>
+    <date>2018-08-01</date>
+    <type>CT</type>
+    <report>nov</report>
+    <doctor>pocek</doctor>
+    <dicom>./DICOM samples/CT-Ort.dcm</dicom>
+  </MedicalExamination>
 </MedicalExamination>

@@ -3,6 +3,7 @@ from tkinter import messagebox
 import tkinter
 from Patient import Patient
 from MedicalExamination import MedicalExamination
+from DodajPregled import DodajPregled
 
 class Pregledi(tkinter.Frame):
 
@@ -53,7 +54,7 @@ class Pregledi(tkinter.Frame):
 	def addExamination(self):
 		self.parent.withdraw()
 		self.newWindow = tkinter.Toplevel(self.parent)
-		bb = dodajPregled(self.newWindow, Main, self.patient.LBO)
+		bb = DodajPregled(self.newWindow, Pregledi,self.patient.LBO,self.otac,self.patient)
 
 	def writeMedicalExamination(self,LBO):
 		self.medL = MedicalExamination.readXML()

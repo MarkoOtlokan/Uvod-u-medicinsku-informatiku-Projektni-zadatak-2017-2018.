@@ -58,14 +58,23 @@ class MedicalExamination(object):
     def doctor(self, doctor):
         self.__doctor = doctor
 
+    @property
+    def dicom(self):
+        return self.__dicom
 
-    def __init__(self, id,patient_LBO, date, type, report ,doctor):
+    @dicom.setter
+    def dicom(self, dicom):
+        self.__dicom = dicom
+
+
+    def __init__(self, id,patient_LBO, date, type, report ,doctor,dicom):
         self.__id = id
         self.__patient_LBO = patient_LBO
         self.__date = date
         self.__type = type
         self.__report = report
         self.__doctor = doctor
+        self.__dicom = dicom
 
     def __str__(self):
         return "\n".join([
@@ -74,7 +83,8 @@ class MedicalExamination(object):
             "{:>12}: {}".format("date", self.__date),
             "{:>12}: {}".format("report", self.__report),
             "{:>12}: {}".format("type", self.__type),
-            "{:>12}: {}".format("doctor", self.__doctor)]
+            "{:>12}: {}".format("doctor", self.__doctor),
+            "{:>12}: {}".format("dicom", self.__dicom)]
             )
 
     def makeEL(self):
@@ -84,6 +94,7 @@ class MedicalExamination(object):
         element.append(etree.Element("type"))
         element.append(etree.Element("report"))
         element.append(etree.Element("doctor"))
+        element.append(etree.Element("dicom"))
         #element.insert(1, etree.Element("prezime")) # umetanje podelementa Element objekta
 
         element.attrib["id"] = str(self.__id)
@@ -94,6 +105,7 @@ class MedicalExamination(object):
         element[2].text = self.__type
         element[3].text = self.__report
         element[4].text = self.__doctor
+        element[5].text = self.__dicom
 
         return element
 
@@ -110,7 +122,7 @@ class MedicalExamination(object):
         #MedicalExaminations
 
 
-        for id in sorted(medical_examinations.keys()):
+        for id in medical_examinations.keys():
             med = medical_examinations[id]
             medEL = _class.makeEL(med)
             medSEL.append(medEL)
@@ -143,8 +155,8 @@ class MedicalExamination(object):
         type = element[2].text
         report = element[3].text
         doctor = element[4].text
-
-        med = _class(id,lbo,date,type,report,doctor)
+        dicom = element[5].text
+        med = _class(id,lbo,date,type,report,doctor,dicom)
 
         #patient = _class(LBO, name, surname, date_of_birth)
         return med
@@ -173,3 +185,27 @@ class MedicalExamination(object):
             return meds
         except OSError:
             return {}
+
+    def element_class(element):
+        tmp = MedicalExamination(element.id,element.patient_LBO,element.date,element.type,element.report,element.doctor,element.dicom)
+        return (tmp)
+
+
+    def xmlToList():
+        meds = MedicalExamination.readXML()
+        listOfMeds = {}
+        for med in meds:
+            tmp = MedicalExamination.element_class(med)
+            listOfMeds[int(tmp.id)] = tmp
+
+        return listOfMeds
+
+
+    def addNewMed(med):
+        meds =MedicalExamination.xmlToList()
+        meds[med.id] = med
+        for p in meds:
+            print(p)
+            print()
+        MedicalExamination.saveXML(meds)
+        return ("suc")

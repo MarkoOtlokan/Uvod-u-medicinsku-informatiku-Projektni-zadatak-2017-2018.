@@ -16,7 +16,7 @@
 									</xs:restriction>
 								</xs:simpleType>
 							</xs:element>
-							<xs:element name="datum">
+							<xs:element name="date">
 								<xs:simpleType>
 									<xs:restriction base="xs:date">
 										<xs:minInclusive value="1900-01-01"/>
@@ -49,7 +49,7 @@
 									</xs:restriction>
 								</xs:simpleType>
 							</xs:element>
-							<xs:element name="snimak">
+							<xs:element name="dicom">
 								<xs:simpleType>
 									<xs:restriction base="xs:string">
 										<xs:minLength value="2"/>

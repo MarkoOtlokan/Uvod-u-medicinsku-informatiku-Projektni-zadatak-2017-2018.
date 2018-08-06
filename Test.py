@@ -6,14 +6,10 @@ from Patient import Patient
 
 
 def Test():
-    med2 = MedicalExamination(12346,17162739481,"2015-04-29T04:16:49.792-04:00","pregled","ne uspesan","pocek")
-    med =  MedicalExamination(12345,17162739481,"2013-04-29T04:16:49.792-04:00","pregled","uspesan","pocek")
-    med3 = MedicalExamination(12349,17162722281,"2015-04-29T04:16:49.792-04:00","pregled","ne uspesan","pocek")
+    med2 = MedicalExamination(12346,17162739481,"2015-04-29","CT","ne uspesan","pocek","neka putanja")
 
     meds = {}
     meds[med2.id] = med2
-    meds[med3.id] = med3
-    meds[med.id] = med
     MedicalExamination.saveXML(meds)
     natasa = Patient(17162739481,'s','ss','sd')
 

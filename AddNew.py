@@ -8,9 +8,10 @@ from Call import Calendar
 
 class AddNew(tkinter.Frame):
 
-	def __init__(self, parent, otac, patienteKeys):
+	def __init__(self, parent, otac, patienteKeys, data = {}):
+
 		self.patienteKeys = patienteKeys
-		self.data = {}
+		self.data = data
 		self.otac = otac
 		self.parent=parent
 		self.frame = tkinter.Frame(self.parent)
@@ -35,10 +36,12 @@ class AddNew(tkinter.Frame):
 		self.surname_label.grid(row = 3, column = 0, sticky = tkinter.W)
 		self.surname_entry.grid(row = 3, column = 1)
 		self.date_of_birth_label = tkinter.Label(self.parent, text = "datum rodjenja:")
-		self.date_of_birth_entry = tkinter.Entry(self.parent)
+		if self.data != {}:
+			self.date = tkinter.Label(self.parent, text=str(self.data['year_selected'])+"-"+str(self.data['month_selected'])+"-"+str(self.data['day_selected']))
+			self.date.grid(row = 4, column = 1)
 		self.date_of_birth_label.grid(row = 4, column = 0, sticky = tkinter.W)
-		self.date_of_birth_entry.grid(row = 4, column = 1)
-		self.date_Button = ttk.Button(self.parent, text='Choose',command=self.calCal)
+
+		self.date_Button = ttk.Button(self.parent, text='Izaberi',command=self.calCal)
 		self.date_Button.grid(row = 4, column = 2)
 		self.submit_button = tkinter.Button(self.parent, text = "Insert", command = self.check)
 		self.submit_button.grid(row = 0, column = 0, sticky = tkinter.W)
@@ -56,7 +59,19 @@ class AddNew(tkinter.Frame):
 			if key == self.LBO_entry.get():
 				messagebox.showinfo("Greska", "Uneseni LBO vec postoji")
 				return
-		tmpPatient = Patient(int(tmpLBO), self.name_entry.get(), self.surname_entry.get(),self.date_of_birth_entry.get() )
+		if len(self.name_entry.get()) < 3:
+			messagebox.showinfo("Greska", "Neispravno uneto ime")
+			return
+		if len(self.surname_entry.get()) < 3:
+			messagebox.showinfo("Greska", "Neispravno uneto prezime")
+			return
+
+		try:
+		   self.date
+		except :
+		   messagebox.showinfo("Greska", "unesi datum")
+		   return
+		tmpPatient = Patient(int(tmpLBO), self.name_entry.get(), self.surname_entry.get(), str(self.data['year_selected'])+"-"+str(self.data['month_selected'])+"-"+str(self.data['day_selected']))
 		Patient.addNewPatient(tmpPatient)
 		messagebox.showinfo("Uspeh", "Uspesno ste uneli pacijenta")
 		self.goBack()
@@ -68,7 +83,10 @@ class AddNew(tkinter.Frame):
 
 	def calCal(self):
 		child = tkinter.Toplevel()
-		cal = Calendar(child, self.data)
+		cal = Calendar(child,AddNew,self.parent,self.otac,self.patienteKeys,self.data)
+		print("prosao")
 
 	def fillDate(self):
-		self.date_of_birth_entry.insert(0, str(self.data['year_selected'])+"-"+str(self.data['month_selected'])+"-"+str(self.data['day_selected']))
+		if self.data == {}:
+			return
+		self.date_of_birth_entry  = (0, str(self.data['year_selected'])+"-"+str(self.data['month_selected'])+"-"+str(self.data['day_selected']) )
