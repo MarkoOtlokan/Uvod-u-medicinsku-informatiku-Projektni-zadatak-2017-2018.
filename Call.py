@@ -2,14 +2,12 @@ import calendar
 import datetime
 import sys
 import tkinter as tk
+from AddNew import AddNew
+
 class Calendar:
-    def __init__(self,parent, otac,first, second, treci, values):
+    def __init__(self, parent, values):
         self.values = values
         self.parent = parent
-        self.first = first
-        self.second = second
-        self.treci = treci
-        self.otac = otac
         self.cal = calendar.TextCalendar(calendar.SUNDAY)
         self.year = datetime.date.today().year
         self.month = datetime.date.today().month
@@ -109,7 +107,4 @@ class Calendar:
         ok.grid(row=9, column=2, columnspan=3, pady=10)
 
     def kill_and_save(self):
-        self.parent.withdraw()
-        self.newWindow = tk.Toplevel(self.parent)
-        bb = self.otac(self.first,self.second, self.treci, self.values)
         self.parent.destroy()

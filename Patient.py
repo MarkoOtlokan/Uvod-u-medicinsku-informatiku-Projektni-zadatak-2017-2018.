@@ -98,7 +98,7 @@ class Patient(object):
         # Element se moze inicijalizovati nazivom i opciono rečnikom atributa i/ili rečnikom namespace-ova
         patienteEL = etree.Element("patiente", attributes, namespaces)
 
-        for LBO in sorted(patiente.keys()):
+        for LBO in patiente.keys():
             patient = patiente[LBO]
             patientEL = _class.makeEL(patient)
             patienteEL.append(patientEL)

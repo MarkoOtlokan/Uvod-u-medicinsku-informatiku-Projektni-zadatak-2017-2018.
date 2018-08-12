@@ -1,10 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <patiente xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="patient.xsd">
-  <patient LBO="10293019293">
-    <name>novo</name>
-    <surname>ime</surname>
-    <date_of_birth>2018-05-08</date_of_birth>
-  </patient>
   <patient LBO="11111111111">
     <name>Marko</name>
     <surname>Otlokan</surname>
@@ -15,14 +10,19 @@
     <surname>ssss</surname>
     <date_of_birth>2018-08-03</date_of_birth>
   </patient>
+  <patient LBO="10293019293">
+    <name>nonina</name>
+    <surname>ime</surname>
+    <date_of_birth>2018-05-08</date_of_birth>
+  </patient>
   <patient LBO="12341231231">
-    <name>marko</name>
-    <surname>otlokan</surname>
+    <name>Marko</name>
+    <surname>Otlokan</surname>
     <date_of_birth>2018-08-15</date_of_birth>
   </patient>
-  <patient LBO="12345678912">
-    <name>jovana</name>
-    <surname>otlokan</surname>
-    <date_of_birth>2017-11-07</date_of_birth>
+  <patient LBO="19283748392">
+    <name>Uspesno</name>
+    <surname>Uradjeno</surname>
+    <date_of_birth>1998-08-01</date_of_birth>
   </patient>
 </patiente>
