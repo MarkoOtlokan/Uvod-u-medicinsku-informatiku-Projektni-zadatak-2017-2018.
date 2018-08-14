@@ -4,6 +4,7 @@ import tkinter
 from Patient import Patient
 from MedicalExamination import MedicalExamination
 from AddNew import DodajPregled
+from ChangeMed import ChangeMed
 
 class Pregledi(tkinter.Frame):
 
@@ -87,7 +88,7 @@ class Pregledi(tkinter.Frame):
 				self.dicom_button.grid(row = 1, column = 4, sticky = tkinter.W)
 				self.delete_button = tkinter.Button(self.parent, text = "Obrisi pregled", command = lambda: self.dMed(med.id))
 				self.delete_button.grid(row = 2, column = 4, sticky = tkinter.W)
-				self.change_button = tkinter.Button(self.parent, text = "izmeni", command = lambda: self.showChange(med.id))
+				self.change_button = tkinter.Button(self.parent, text = "izmeni", command = lambda: self.showChange(med))
 				self.change_button.grid(row = 3, column = 4, sticky = tkinter.W)
 
 	def goToDicom(self, path):
@@ -106,15 +107,16 @@ class Pregledi(tkinter.Frame):
 	def deleteMed(self, id):
 		self.win.destroy()
 		med = MedicalExamination.xmlToList()
+		print(med[int(id)])
 		del med[int(id)]
 		MedicalExamination.saveXML(med)
 		self.initialize_insert_interface()
 		messagebox.showinfo("Uspeh", "Uspesno ste obrisali pregled")
 
-	def showChange(self,patient):
+	def showChange(self,med):
 		self.parent.withdraw()
 		self.newWindow = tkinter.Toplevel(self.parent)
-		bb = Change(self.newWindow, Main, patient)
+		bb = ChangeMed(self.newWindow, Pregledi, med,self.patient,self.otac)
 
 
 	def goBack(self):

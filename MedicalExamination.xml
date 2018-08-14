@@ -16,20 +16,12 @@
     <doctor>pocek</doctor>
     <dicom>./DICOM samples/CT-Ort.dcm</dicom>
   </MedicalExamination>
-  <MedicalExamination id="4025546722">
-    <patient_LBO>19283748392</patient_LBO>
-    <date>2018-08-01</date>
+  <MedicalExamination id="2034618686">
+    <patient_LBO>12345698756</patient_LBO>
+    <date>2018-08-07</date>
     <type>CT</type>
-    <report>sve je uredu</report>
-    <doctor>pocek</doctor>
-    <dicom>./DICOM samples/CT-Ankle.dcm</dicom>
-  </MedicalExamination>
-  <MedicalExamination id="2065311447">
-    <patient_LBO>19283748392</patient_LBO>
-    <date>2018-08-01</date>
-    <type>CT</type>
-    <report>ssss</report>
-    <doctor>nov</doctor>
-    <dicom>./DICOM samples/CT-Ort.dcm</dicom>
+    <report>ss</report>
+    <doctor>2ss</doctor>
+    <dicom>./DICOM samples/CT-Abdomen.dcm</dicom>
   </MedicalExamination>
 </MedicalExamination>

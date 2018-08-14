@@ -150,7 +150,6 @@ class DodajPregled(tkinter.Frame):
 		self.odabirSnimka.grid(row = 8, column = 2)
 		self.submit_button = tkinter.Button(self.parent, text = "dodaj", command = self.check)
 		self.submit_button.grid(row = 9, column = 0, sticky = tkinter.W)
-		self.filename =  tkinter.filedialog.askopenfilename(initialdir = "/",title = "Select file",filetypes = (("*"),("all files","*.*")))
 		self.exit_button = tkinter.Button(self.parent, text = "Exit", command = self.goBack)
 		self.exit_button.grid(row = 0, column = 3)
 

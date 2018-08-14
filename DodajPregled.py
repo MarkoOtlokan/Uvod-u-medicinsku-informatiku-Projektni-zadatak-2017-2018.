@@ -31,7 +31,8 @@ class DodajPregled(tkinter.Frame):
 		self.naslov_label.grid(row = 0, column = 0, sticky = tkinter.W)
 		self.id_label = tkinter.Label(self.parent, text = "id: "+self.id)
 		self.id_label.grid(row = 2, column = 0, sticky = tkinter.W)
-
+		self.exit_button = tkinter.Button(self.parent, text = "Exit", command = self.goBack)
+		self.exit_button.grid(row = 0, column = 1)
 		self.date_of_birth_label = tkinter.Label(self.parent, text = "datum pregleda:")
 		self.date_of_birth_entry = tkinter.Entry(self.parent)
 		self.date_of_birth_label.grid(row = 4, column = 0, sticky = tkinter.W)
@@ -63,7 +64,7 @@ class DodajPregled(tkinter.Frame):
 		self.odabirSnimka.grid(row = 8, column = 2)
 		self.submit_button = tkinter.Button(self.parent, text = "dodaj", command = self.check)
 		self.submit_button.grid(row = 9, column = 0, sticky = tkinter.W)
-		self.filename =  tkinter.filedialog.askopenfilename(initialdir = "/",title = "Select file",filetypes = (("*"),("all files","*.*")))
+		self.filename =  tkinter.filedialog.askopenfilename(initialdir = "/",title = "Select file",filetypes = [("all files","*.*")])
 		self.exit_button = tkinter.Button(self.parent, text = "Exit", command = self.goBack)
 		self.exit_button.grid(row = 0, column = 3)
 
@@ -213,3 +214,8 @@ class Calendar:
 	def kill_and_save(self):
 		self.otac.setDate(self.selfP,self.values)
 		self.parent.destroy()
+
+	def goBack(self):
+		self.parent.withdraw()
+		self.newWindow = tkinter.Toplevel(self.parent)
+		bb = self.otac(self.newWindow)
