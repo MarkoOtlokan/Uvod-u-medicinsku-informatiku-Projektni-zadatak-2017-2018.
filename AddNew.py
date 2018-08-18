@@ -155,6 +155,22 @@ class DodajPregled(tkinter.Frame):
 
 	def check(self):
 		self.fillDate()
+		#print(len(tmpLBO))
+		if len(self.report_entry.get()) < 3:
+			messagebox.showinfo("Greska", "Neispravno uneto izvestaj")
+			return
+		if len(self.doctor_entry.get()) < 3:
+			messagebox.showinfo("Greska", "Neispravno unet doktor")
+			return
+		if len(self.dicom_entry.get()) < 3:
+			messagebox.showinfo("Greska", "Niste uneli dciom datoteku") # Mozda nije obavezna ??????????
+			return
+
+		try:
+		   self.date
+		except :
+		   messagebox.showinfo("Greska", "unesi datum")
+		   return
 		#treba ubaciti proveru da li su svi dole navedeni ispravno
 		tmpMed = MedicalExamination(self.id,self.patientKey,self.date.cget("text"),  self.var.get(), self.report_entry.get(), self.doctor_entry.get(),self.dicom_entry.get() )
 		#add new]
