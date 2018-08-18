@@ -49,9 +49,9 @@ class AddNew(tkinter.Frame):
 		self.exit_button.grid(row = 0, column = 3)
 
 	def check(self):
-		self.fillDate() # treba ga postaviti negde da cim se popuni kalendar, da se on izvrsi
+		self.fillDate()
 		tmpLBO = self.LBO_entry.get()
-		print(len(tmpLBO))
+		#print(len(tmpLBO))
 		if(len(tmpLBO) != 11 or tmpLBO.isdigit() == False):
 			messagebox.showinfo("Greska", "Lose unet LBO")
 			return

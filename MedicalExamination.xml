@@ -20,8 +20,8 @@
     <patient_LBO>12345698756</patient_LBO>
     <date>2018-08-07</date>
     <type>CT</type>
-    <report>ss</report>
+    <report>pocek</report>
     <doctor>2ss</doctor>
-    <dicom>./DICOM samples/CT-Abdomen.dcm</dicom>
+    <dicom>./DICOM samples/CT-Ankle.dcm</dicom>
   </MedicalExamination>
 </MedicalExamination>

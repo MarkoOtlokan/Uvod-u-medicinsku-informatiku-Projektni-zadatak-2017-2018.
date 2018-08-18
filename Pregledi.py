@@ -60,7 +60,7 @@ class Pregledi(tkinter.Frame):
 	def writeMedicalExamination(self,LBO):
 		self.medL = MedicalExamination.readXML()
 		for med in self.medL:
-			if(med.patient_LBO == self.patient.LBO):
+			if(med.patient_LBO == self.patient.LBO): #bitan deo spajanje pacijenata i pregleda
 				self.tree.insert('', '0', values=(med.date,med.type,med.id))
 				self.tree.bind('<<TreeviewSelect>>', lambda x: self.writeDataOfMed(med.id))
 
@@ -76,7 +76,7 @@ class Pregledi(tkinter.Frame):
 				self.id_label.grid(row = 1, column = 2, sticky = tkinter.W)
 				self.LBO_label = tkinter.Label(self.parent, text = "LBO pacijenta:" + med.patient_LBO)
 				self.LBO_label.grid(row = 2, column = 2, sticky = tkinter.W)
-				self.date_label = tkinter.Label(self.parent, text = "LBO:" + med.date)
+				self.date_label = tkinter.Label(self.parent, text = "Datum pregleda:" + med.date)
 				self.date_label.grid(row = 3, column = 2, sticky = tkinter.W)
 				self.report_label = tkinter.Label(self.parent, text = "izvestaj: "+ med.report)
 				self.report_label.grid(row = 4, column = 2, sticky = tkinter.W)

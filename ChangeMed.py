@@ -2,7 +2,7 @@ from tkinter import ttk
 from tkinter import messagebox
 import tkinter
 from MedicalExamination import MedicalExamination
-
+from tkinter import filedialog
 class ChangeMed(tkinter.Frame):
 
     def __init__(self, parent, otac, med, pat,ot):
@@ -24,14 +24,14 @@ class ChangeMed(tkinter.Frame):
         self.New_label = tkinter.Label(self.parent, text = "Nove vrednosti")
         self.New_label.grid(row = 1, column = 1, sticky = tkinter.W)
 
-        self.name_label = tkinter.Label(self.parent, text = self.med.date)
-        self.name_entry = tkinter.Entry(self.parent)
-        self.name_label.grid(row = 2, column = 0, sticky = tkinter.W)
-        self.name_entry.grid(row = 2, column = 1)
+        self.date_label = tkinter.Label(self.parent, text = self.med.date)
+        self.date_entry = tkinter.Entry(self.parent)
+        self.date_label.grid(row = 2, column = 0, sticky = tkinter.W)
+        self.date_entry.grid(row = 2, column = 1)
 
         self.option_label = tkinter.Label(self.parent, text = self.med.type)
         self.var = tkinter.StringVar()
-        self.var.set("CT") # initial value
+        self.var.set("Izaberi") # initial value
         self.optionList = ['CT', 'MR','XA','RF', 'US','ECG']
         self.option = tkinter.OptionMenu(self.parent,self.var, *self.optionList)
         self.option.grid(row = 3, column = 1)
@@ -83,39 +83,31 @@ class ChangeMed(tkinter.Frame):
         self.dicom_entry.insert(tkinter.END,self.route)
 
     def check(self):
-        tmpName = self.name_entry.get()
-        tmpSurname = self.surname_entry.get()
-        tmpDate_of_birth = self.date_of_birth_entry.get()
-        print(tmpName,tmpSurname,tmpDate_of_birth)
-        if not tmpName:
-            tmpName = self.patient.name
-        if not tmpSurname:
-            tmpSurname = self.patient.surname
-        if not tmpDate_of_birth:
-            tmpDate_of_birth = self.patient.date_of_birth
+        tmpDate = self.date_entry.get()
+        tmpDoctor = self.doctor_entry.get()
+        tmpReport = self.report_entry.get()
+        tmpDicom = self.dicom_entry.get()
+        tmpType = self.var.get()
+        #print(tmpName,tmpSurname,tmpDate_of_birth)
+        if not tmpDate:
+            tmpDate = self.med.date
+        if not tmpDoctor:
+            tmpDoctor = self.med.doctor
+        if not tmpReport:
+            tmpReport = self.med.report
+        if not tmpDicom:
+            tmpDicom = self.med.dicom
+        if tmpType == "Izaberi":
+            tmpType = self.med.type
 
-        patiente = Patient.xmlToList()
-        del patiente[int(self.patient.LBO)]
-        Patient.saveXML(patiente)
-        newPatient = Patient(self.patient.LBO, tmpName, tmpSurname, tmpDate_of_birth)
-        Patient.addNewPatient(newPatient)
+        meds = MedicalExamination.xmlToList()
+        del meds[int(self.med.id)]
+        MedicalExamination.saveXML(meds)
+        newMed = MedicalExamination(self.med.id,self.med.patient_LBO, tmpDate, tmpType, tmpReport, tmpDoctor, tmpDicom)
+        MedicalExamination.addNewMed(newMed)
         messagebox.showinfo("Uspeh", "Uspesno ste izmenili")
         self.goBack()
 
-    def findPatient(self):
-        tmpLBO = self.LBO_entry.get()
-        print(len(tmpLBO))
-        if(len(tmpLBO) != 11 or tmpLBO.isdigit() == False):
-            messagebox.showinfo("Greska", "Lose unet LBO")
-            return
-        for key in self.patienteKeys:
-            if key == self.LBO_entry.get():
-                messagebox.showinfo("Greska", "Uneseni LBO vec postoji")
-                return
-        tmpPatient = Patient(int(tmpLBO), self.name_entry.get(), self.surname_entry.get(),self.date_of_birth_entry.get() )
-        Patient.addNewPatient(tmpPatient)
-        messagebox.showinfo("Uspeh", "Uspesno ste izmenili")
-        self.goBack()
 
     def goBack(self):
         self.parent.withdraw()

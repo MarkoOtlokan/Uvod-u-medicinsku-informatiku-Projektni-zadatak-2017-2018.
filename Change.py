@@ -22,18 +22,20 @@ class Change(tkinter.Frame):
 		self.Current_label.grid(row = 1, column = 0, sticky = tkinter.W)
 		self.New_label = tkinter.Label(self.parent, text = "Nove vrednosti")
 		self.New_label.grid(row = 1, column = 1, sticky = tkinter.W)
+		self.LBO_label = tkinter.Label(self.parent, text = "LBO: "+self.patient.LBO)
+		self.LBO_label.grid(row = 2, column = 0, sticky = tkinter.W)
 		self.name_label = tkinter.Label(self.parent, text = self.patient.name)
 		self.name_entry = tkinter.Entry(self.parent)
-		self.name_label.grid(row = 2, column = 0, sticky = tkinter.W)
-		self.name_entry.grid(row = 2, column = 1)
+		self.name_label.grid(row = 3, column = 0, sticky = tkinter.W)
+		self.name_entry.grid(row = 3, column = 1)
 		self.surname_label = tkinter.Label(self.parent, text = self.patient.surname)
 		self.surname_entry = tkinter.Entry(self.parent)
-		self.surname_label.grid(row = 3, column = 0, sticky = tkinter.W)
-		self.surname_entry.grid(row = 3, column = 1)
+		self.surname_label.grid(row = 4, column = 0, sticky = tkinter.W)
+		self.surname_entry.grid(row = 4, column = 1)
 		self.date_of_birth_label = tkinter.Label(self.parent, text = self.patient.date_of_birth)
 		self.date_of_birth_entry = tkinter.Entry(self.parent)
-		self.date_of_birth_label.grid(row = 4, column = 0, sticky = tkinter.W)
-		self.date_of_birth_entry.grid(row = 4, column = 1)
+		self.date_of_birth_label.grid(row = 5, column = 0, sticky = tkinter.W)
+		self.date_of_birth_entry.grid(row = 5, column = 1)
 		self.submit_button = tkinter.Button(self.parent, text = "Potvrdi", command = self.check)
 		self.submit_button.grid(row = 0, column = 0, sticky = tkinter.W)
 		self.exit_button = tkinter.Button(self.parent, text = "Exit", command = self.goBack)
@@ -50,7 +52,7 @@ class Change(tkinter.Frame):
 			tmpSurname = self.patient.surname
 		if not tmpDate_of_birth:
 			tmpDate_of_birth = self.patient.date_of_birth
-
+			####proveraaa
 		patiente = Patient.xmlToList()
 		del patiente[int(self.patient.LBO)]
 		Patient.saveXML(patiente)
@@ -59,20 +61,7 @@ class Change(tkinter.Frame):
 		messagebox.showinfo("Uspeh", "Uspesno ste izmenili")
 		self.goBack()
 
-	def findPatient(self):
-		tmpLBO = self.LBO_entry.get()
-		print(len(tmpLBO))
-		if(len(tmpLBO) != 11 or tmpLBO.isdigit() == False):
-			messagebox.showinfo("Greska", "Lose unet LBO")
-			return
-		for key in self.patienteKeys:
-			if key == self.LBO_entry.get():
-				messagebox.showinfo("Greska", "Uneseni LBO vec postoji")
-				return
-		tmpPatient = Patient(int(tmpLBO), self.name_entry.get(), self.surname_entry.get(),self.date_of_birth_entry.get() )
-		Patient.addNewPatient(tmpPatient)
-		messagebox.showinfo("Uspeh", "Uspesno ste izmenili")
-		self.goBack()
+
 
 	def goBack(self):
 		self.parent.withdraw()

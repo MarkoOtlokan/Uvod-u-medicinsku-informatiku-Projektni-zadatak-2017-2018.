@@ -1,6 +1,5 @@
 from lxml import etree
 import sys
-sys.path.append('./MedicalExamination')
 from MedicalExamination import MedicalExamination
 
 class Patient(object):
@@ -63,10 +62,6 @@ class Patient(object):
             "{:>12}: {}".format("name", self.__name),
             "{:>12}: {}".format("surname", self.__surname),
             "{:>12}: {}".format("date of birth", self.__date_of_birth)])
-
-    def writeAllExamination(self):
-        for i in self.__medical_examination:
-            print(i)
 
 
     def __eq__(self, other):
@@ -136,7 +131,7 @@ class Patient(object):
 
             patiente= []
             for patientEL in patienteEL: # Element je proširenje liste, pa može da se iterira kroz njegove podelemente
-                patient = _class.elToClass(patientEL)
+                patient = _class.elToClass(patientEL)###prepraviiiiiiiiiiiiiiiiiiiiiiiiiii
                 patiente.append(patient)
 
             return patiente
@@ -157,6 +152,8 @@ class Patient(object):
         return patient
 
 
+
+        #?????????????
     def element_class(element):
         tmp = Patient(element.LBO,element.name,element.surname, element.date_of_birth)
         return (tmp)
@@ -164,7 +161,7 @@ class Patient(object):
     def xmlToList():
         patiente = Patient.readXML()
 
-        print("prosao")
+        #print("prosao")
         listOfPatiente = {}
         for patient in patiente:
             tmp = Patient.element_class(patient)
@@ -176,23 +173,5 @@ class Patient(object):
     def addNewPatient(patient):
         patiente = Patient.xmlToList()
         patiente[patient.LBO] = patient
-        for p in patiente:
-            print(p)
-            print()
         Patient.saveXML(patiente)
         return ("suc")
-
-    def changeName(patient):
-        pass
-
-    def pronadjiPreglede(patient):
-        pregledi = MedicalExamination.readXML()
-        for p in pregledi:
-            if int(p.patient_LBO) == patient.LBO:
-                print(p)
-            else:
-                print("nee")
-                print(p.patient_LBO)
-                print("ddd")
-                print(patient.LBO)
-                print("sss")

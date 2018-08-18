@@ -3,7 +3,6 @@ from tkinter import ttk
 import tkinter
 from AddNew import AddNew
 from Change import Change
-sys.path.append('../Patient.py')
 from Patient import Patient
 from Pregledi import Pregledi
 from Call import Calendar
@@ -84,7 +83,7 @@ class Main(tkinter.Frame):
         list = tmp.get('values')
         tmpLBO = list[2]
         for patient in self.patiente:
-            if str(tmpLBO) == str(patient.LBO): ##################### jedan je string jedan nije treba proveriti !!!!!!!!!!!!!!!!!!!!!!!
+            if str(tmpLBO) == str(patient.LBO):
                 self.writeDataOfPatient(patient)
                 return
 
