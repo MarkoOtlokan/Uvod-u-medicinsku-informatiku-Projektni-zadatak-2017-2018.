@@ -7,6 +7,10 @@ from Patient import Patient
 import uuid
 from tkinter import filedialog
 from MedicalExamination import MedicalExamination
+import pydicom
+import pydicom_PIL
+from PIL import Image, ImageTk
+
 
 
 class AddNew(tkinter.Frame):
@@ -345,9 +349,53 @@ class Dicom(tkinter.Frame):
 		self.parent = parent
 		self.otac = otac
 		self.path = path
+
+		self.nameVar = tkinter.StringVar()
+		self.nameVar.set("")
+		self.__pacijentPrisutan = tkinter.BooleanVar(False)
+
+		self.sd = tkinter.StringVar()
+		self.sd.set("")
+		self.__sd = tkinter.BooleanVar(False)
+
+
+		self.__pbd = tkinter.BooleanVar(False)
+		self.pbd = tkinter.StringVar()
+		self.pbd.set("")
+
+		self.__rp = tkinter.BooleanVar(False)
+		self.rp = tkinter.StringVar()
+		self.rp.set("")
+
+		self.__si = tkinter.BooleanVar(False)
+		self.si = tkinter.StringVar()
+		self.si.set("")
+
+		self.__sdate = tkinter.BooleanVar(False)
+		self.sdate = tkinter.StringVar()
+		self.sdate.set("")
+
+		self.__pi = tkinter.BooleanVar(False)
+		self.pi = tkinter.StringVar()
+		self.pi.set("")
+
 		self.initialize_insert_interface()
 
 	def initialize_insert_interface(self):
+
+
+
+		self.__starostPrisutna = tkinter.BooleanVar(False)
+		self.__starost = tkinter.IntVar()
+		self.__starostJedinica = tkinter.StringVar()
+		self.__starostJedinica.set("Y")
+
+		slika = ImageTk.PhotoImage(Image.open("DICOM-Logo.jpg"))
+		self.__slikaLabela = tkinter.Label(self.parent, image = slika)
+		self.__slikaLabela.image = slika
+		self.__slikaLabela.pack(side = tkinter.RIGHT, expand = 1)
+
+
 		self.name = tkinter.IntVar()
 		self.name.set(1)
 		self.lbo = tkinter.IntVar()
@@ -373,19 +421,23 @@ class Dicom(tkinter.Frame):
 		self.frame1.pack(side = tkinter.TOP, fill = tkinter.X, pady = 10)
 
 		self.lbo_Label = tkinter.Label(self.frame1, text = "LBO: ").pack(side = tkinter.LEFT)
-		self.lbo_entry = tkinter.Entry(self.frame1).pack(side = tkinter.LEFT)
-		self.izostaviLbo = tkinter.Radiobutton(self.frame1, text = "izostavi", variable = self.lbo, value=1).pack(side = tkinter.LEFT)
-		self.rucnoLbo = tkinter.Radiobutton(self.frame1, text="rucno", padx = 10, variable = self.lbo, value=2).pack(side = tkinter.LEFT)
-		self.izsistemaLbo = tkinter.Radiobutton(self.frame1, text="iz sistema", padx = 10, variable = self.lbo, value=3).pack(side = tkinter.LEFT)
+		self.lbo_entry = tkinter.Entry(self.frame1, textvariable = self.pi)
+		self.lbo_entry.pack(side = tkinter.LEFT)
+		self.izostaviLbo = tkinter.Radiobutton(self.frame1, text = "izostavi", variable = self.lbo, value=1, command = self.rucnolbo).pack(side = tkinter.LEFT)
+		self.rucnoLbo = tkinter.Radiobutton(self.frame1, text="rucno", padx = 10, variable = self.lbo, value=2,command = lambda: self.lbo_entry.config(state = "normal")).pack(side = tkinter.LEFT)
+		self.izsistemaLbo = tkinter.Radiobutton(self.frame1, text="iz sistema", padx = 10, variable = self.lbo, value=3,command = self.sistemlbo)
+		self.izsistemaLbo.pack(side = tkinter.LEFT)
 
 		self.frame2 = tkinter.Frame(self.frame)
 		self.frame2.pack(side = tkinter.TOP, fill = tkinter.X, pady = 10)
 
 		self.name_Label = tkinter.Label(self.frame2, text = "IME: ").pack(side = tkinter.LEFT)
-		self.name_entry = tkinter.Entry(self.frame2).pack(side = tkinter.LEFT)
-		self.izostaviIme = tkinter.Radiobutton(self.frame2, text = "izostavi", variable = self.name, value=1).pack(side = tkinter.LEFT)
-		self.rucnoIme = tkinter.Radiobutton(self.frame2, text="rucno", padx = 10, variable = self.name, value=2).pack(side = tkinter.LEFT)
-		self.izsistemaIme = tkinter.Radiobutton(self.frame2, text="iz sistema", padx = 10, variable = self.name, value=3).pack(side = tkinter.LEFT)
+		self.name_entry = tkinter.Entry(self.frame2, textvariable = self.nameVar)
+		self.name_entry.pack(side = tkinter.LEFT)
+		self.izostaviIme = tkinter.Radiobutton(self.frame2, text = "izostavi", variable = self.name, value=1, command = self.rucnoname).pack(side = tkinter.LEFT)
+		self.rucnoIme = tkinter.Radiobutton(self.frame2, text="rucno", padx = 10, variable = self.name, value=2, command = lambda: self.name_entry.config(state = "normal")).pack(side = tkinter.LEFT)
+		self.izsistemaIme = tkinter.Radiobutton(self.frame2, text="iz sistema", padx = 10, variable = self.name, value=3,command = self.sistemname)
+		self.izsistemaIme.pack(side = tkinter.LEFT)
 
 		self.frame3 = tkinter.Frame(self.frame)
 		self.frame3.pack(side = tkinter.TOP, fill = tkinter.X, pady = 10)
@@ -393,11 +445,13 @@ class Dicom(tkinter.Frame):
 		self.dateEntry = tkinter.StringVar()
 		self.dateEntry.set("")
 		self.date_Label = tkinter.Label(self.frame3, text = "datum rodjenja : ").pack(side = tkinter.LEFT)
-		self.date_entry = tkinter.Entry(self.frame3,textvariable = self.dateEntry).pack(side = tkinter.LEFT)
+		self.date_entry = tkinter.Entry(self.frame3,textvariable = self.pbd)
+		self.date_entry.pack(side = tkinter.LEFT)
 		self.date_Button = ttk.Button(self.frame3, text='Izaberi',command=self.calCal).pack(side = tkinter.LEFT)
-		self.izostaviDatum = tkinter.Radiobutton(self.frame3, text = "izostavi", variable = self.d, value=1).pack(side = tkinter.LEFT)
-		self.rucnoDatum = tkinter.Radiobutton(self.frame3, text="rucno", padx = 10, variable = self.d, value=2).pack(side = tkinter.LEFT)
-		self.izsistemaDatum = tkinter.Radiobutton(self.frame3, text="iz sistema", padx = 10, variable = self.d, value=3).pack(side = tkinter.LEFT)
+		self.izostaviDatum1 = tkinter.Radiobutton(self.frame3, text = "izostavi", variable = self.d, value=1, command = self.rucnodate).pack(side = tkinter.LEFT)
+		self.rucnoDatum1 = tkinter.Radiobutton(self.frame3, text="rucno", padx = 10, variable = self.d, value=2,command = lambda: self.date_entry.config(state = "normal")).pack(side = tkinter.LEFT)
+		self.izsistemaDatum1 = tkinter.Radiobutton(self.frame3, text="iz sistema", padx = 10, variable = self.d, value=3,command = self.sistemdate)
+		self.izsistemaDatum1.pack(side = tkinter.LEFT)
 
 
 
@@ -415,27 +469,34 @@ class Dicom(tkinter.Frame):
 		self.doc = tkinter.IntVar()
 		self.doc.set(1)
 
+
 		self.framesec1 = tkinter.Frame(self.framesec)
 		self.framesec1.pack(side = tkinter.TOP, fill = tkinter.X, pady = 10)
 
 		self.id_Label = tkinter.Label(self.framesec1, text = "id: ").pack(side = tkinter.LEFT)
-		self.id_entry = tkinter.Entry(self.framesec1).pack(side = tkinter.LEFT)
-		self.izostaviid = tkinter.Radiobutton(self.framesec1, text = "izostavi", variable = self.id, value=1).pack(side = tkinter.LEFT)
-		self.rucnoid = tkinter.Radiobutton(self.framesec1, text="rucno", padx = 10, variable = self.id, value=2).pack(side = tkinter.LEFT)
-		self.izsistemaid = tkinter.Radiobutton(self.framesec1, text="iz sistema", padx = 10, variable = self.id, value=3).pack(side = tkinter.LEFT)
+		self.id_entry = tkinter.Entry(self.framesec1 , textvariable = self.si)
+		self.id_entry.pack(side = tkinter.LEFT)
+		self.izostaviid = tkinter.Radiobutton(self.framesec1, text = "izostavi", variable = self.id, value=1, command = self.rucnoid).pack(side = tkinter.LEFT)
+		self.rucnoid = tkinter.Radiobutton(self.framesec1, text="rucno", padx = 10, variable = self.id, value=2, command = lambda: self.id_entry.config(state = "normal")).pack(side = tkinter.LEFT)
+		self.izsistemaid = tkinter.Radiobutton(self.framesec1, text="iz sistema", padx = 10, variable = self.id, value=3,command = self.sistemid)
+		self.izsistemaid.pack(side = tkinter.LEFT)
 
 
 		self.framesec3 = tkinter.Frame(self.framesec)
 		self.framesec3.pack(side = tkinter.TOP, fill = tkinter.X, pady = 10)
 
-		self.date2Entry = tkinter.StringVar()
-		self.date2Entry.set("")
 		self.date2_Label = tkinter.Label(self.framesec3, text = "datum : ").pack(side = tkinter.LEFT)
-		self.date2_entry = tkinter.Entry(self.framesec3,textvariable = self.date2Entry).pack(side = tkinter.LEFT)
+		self.date2_entry = tkinter.Entry(self.framesec3,textvariable = self.sdate)
+		self.date2_entry.pack(side = tkinter.LEFT)
 		self.date2_Button = ttk.Button(self.framesec3, text='Izaberi',command=self.calCal).pack(side = tkinter.LEFT)
-		self.izostaviDatum = tkinter.Radiobutton(self.framesec3, text = "izostavi", variable = self.dt, value=1).pack(side = tkinter.LEFT)
-		self.rucnoDatum = tkinter.Radiobutton(self.framesec3, text="rucno", padx = 10, variable = self.dt, value=2).pack(side = tkinter.LEFT)
-		self.izsistemaDatum = tkinter.Radiobutton(self.framesec3, text="iz sistema", padx = 10, variable = self.dt, value=3).pack(side = tkinter.LEFT)
+
+
+
+		self.izostaviDatum = tkinter.Radiobutton(self.framesec3, text = "izostavi", variable = self.dt, value=1, command = self.rucnoDate2).pack(side = tkinter.LEFT)
+		self.rucnoDatum = tkinter.Radiobutton(self.framesec3, text="rucno", padx = 10, variable = self.dt, command = lambda: self.date2_entry.config(state = "normal"), value=2).pack(side = tkinter.LEFT)
+		self.izsistemaDatum = tkinter.Radiobutton(self.framesec3, text="iz sistema", padx = 10, variable = self.dt, command = self.sistemDatum2, value=3)
+		self.izsistemaDatum.pack(side = tkinter.LEFT)
+
 
 		self.framesec5 = tkinter.Frame(self.framesec)
 		self.framesec5.pack(side = tkinter.TOP, fill = tkinter.X, pady = 10)
@@ -454,21 +515,104 @@ class Dicom(tkinter.Frame):
 		self.framesec2.pack(side = tkinter.TOP, fill = tkinter.X, pady = 10)
 
 		self.report_Label = tkinter.Label(self.framesec2, text = "Izvestaj: ").pack(side = tkinter.LEFT)
-		self.report_entry = tkinter.Entry(self.framesec2).pack(side = tkinter.LEFT)
-		self.izostaviReport = tkinter.Radiobutton(self.framesec2, text = "izostavi", variable = self.report, value=1).pack(side = tkinter.LEFT)
-		self.rucnoReport = tkinter.Radiobutton(self.framesec2, text="rucno", padx = 10, variable = self.report, value=2).pack(side = tkinter.LEFT)
-		self.izsistemaReport = tkinter.Radiobutton(self.framesec2, text="iz sistema", padx = 10, variable = self.report, value=3).pack(side = tkinter.LEFT)
+		self.report_entry = tkinter.Entry(self.framesec2, textvariable = self.sd)
+		self.report_entry.pack(side = tkinter.LEFT)
+		self.izostaviReport = tkinter.Radiobutton(self.framesec2, text = "izostavi", variable = self.report, value=1,command = self.rucnoreport).pack(side = tkinter.LEFT)
+		self.rucnoReport = tkinter.Radiobutton(self.framesec2, text="rucno", padx = 10, variable = self.report, value=2, command = lambda: self.report_entry.config(state = "normal")).pack(side = tkinter.LEFT)
+		self.izsistemaReport = tkinter.Radiobutton(self.framesec2, text="iz sistema", padx = 10, variable = self.report, value=3,command = self.sistemreport)
+		self.izsistemaReport.pack(side = tkinter.LEFT)
 
 		self.framesec4 = tkinter.Frame(self.framesec)
 		self.framesec4.pack(side = tkinter.TOP, fill = tkinter.X, pady = 10)
 
 		self.doctor_Label = tkinter.Label(self.framesec4, text = "Doktor: ").pack(side = tkinter.LEFT)
-		self.doctor_entry = tkinter.Entry(self.framesec4).pack(side = tkinter.LEFT)
-		self.izostaviDoctor = tkinter.Radiobutton(self.framesec4, text = "izostavi", variable = self.doc, value=1).pack(side = tkinter.LEFT)
-		self.rucnoDoctor = tkinter.Radiobutton(self.framesec4, text="rucno", padx = 10, variable = self.doc, value=2).pack(side = tkinter.LEFT)
-		self.izsistemaDoctor = tkinter.Radiobutton(self.framesec4, text="iz sistema", padx = 10, variable = self.doc, value=3).pack(side = tkinter.LEFT)
+		self.doctor_entry = tkinter.Entry(self.framesec4, textvariable = self.rp)
+		self.doctor_entry.pack(side = tkinter.LEFT)
+		self.izostaviDoctor = tkinter.Radiobutton(self.framesec4, text = "izostavi", variable = self.doc, value=1,command = self.rucnodoctor).pack(side = tkinter.LEFT)
+		self.rucnoDoctor = tkinter.Radiobutton(self.framesec4, text="rucno", padx = 10, variable = self.doc, value=2, command = lambda: self.doctor_entry.config(state = "normal")).pack(side = tkinter.LEFT)
+		self.izsistemaDoctor = tkinter.Radiobutton(self.framesec4, text="iz sistema", padx = 10, variable = self.doc, value=3, command = self.sistemdoctor)
+		self.izsistemaDoctor.pack(side = tkinter.LEFT)
 
 		self.klikNaOtvoriDugme()
+
+	def rucnoname(self):
+		self.nameVar.set("")
+		self.name_entry.config(state = "disabled")
+
+	def sistemname(self):
+		self.name_entry.config(state = "disabled")
+		self.nameVar.set(self.__dataset.PatientName)
+
+	def rucnolbo(self):
+		self.sdate.set("")
+		self.date2_entry.config(state = "disabled")
+
+	def sistemlbo(self):
+		self.lbo_entry.config(state = "disabled")
+		self.pi.set(self.__dataset.PatientID)
+
+	def rucnodate(self):
+		self.pbd.set("")
+		self.date_entry.config(state = "disabled")
+
+	def sistemdate(self):
+		self.date_entry.config(state = "disabled")
+		self.pbd.set(self.dtod(self.__dataset.PatientBirthDate))
+
+	def rucnoid(self):
+		self.si.set("")
+		self.id_entry.config(state = "disabled")
+
+	def sistemid(self):
+		self.id_entry.config(state = "disabled")
+		self.si.set(self.__dataset.StudyID)
+
+	def rucnoDate2(self):
+		self.sdate.set("")
+		self.date2_entry.config(state = "disabled")
+
+	def sistemDatum2(self):
+		self.date2_entry.config(state = "disabled")
+		self.sdate.set(self.dtod(self.__dataset.StudyDate))#
+
+	def rucnoreport(self):
+		self.sd.set("")
+		self.report_entry.config(state = "disabled")
+
+	def sistemreport(self):
+		self.report_entry.config(state = "disabled")
+		self.sd.set(self.__dataset.StudyDescription)
+
+	def rucnodoctor(self):
+		self.rp.set("")
+		self.doctor_entry.config(state = "disabled")
+
+	def sistemdoctor(self):
+		self.doctor_entry.config(state = "disabled")
+		self.rp.set(self.__dataset.ReferringPhysicianName)
+
+	def datum(self):
+		print("uspeo")
+
+	def dtod(self, date):
+		print("usao")
+		try:
+		    date = date.split('.')
+		    if date[0]=='':
+		        return ('')
+
+		    newDate = date[2]+'-'+ date[1]+ '-' + date[0]
+		    return(newDate)
+		except:
+		    try:
+
+		        newDate = date[0][6:8]+'-'+ date[0][4:6]+ '-' + date[0][0:4]
+		        return (newDate)
+		    except:
+
+		        return ('')
+
+
 
 	def fillDate(self):
 
@@ -493,72 +637,119 @@ class Dicom(tkinter.Frame):
 		self.parent.destroy()
 
 	def check(self):
-		pass
+
+		self.__dataset.PatientName = self.name_entry.get() # vrednost podatka
+		self.__dataset.PatientBirthDate = self.date_entry.get()
+		self.__dataset.StudyDescription = self.report_entry.get()
+		self.__dataset.ReferringPhysicianName = self.doctor_entry.get()
+		self.__dataset.StudyID= self.id_entry.get()
+		self.__dataset.StudyDate = self.date2_entry.get()
+		self.__dataset.PatientID = self.lbo_entry.get()
+
+		self.__dataset.save_as(self.path) # čuvanje dataset-a; ako ne postoji, biće kreiran
+		messagebox.showinfo("Uspeh", "Uspesno ste izmenili datoteku")
+		self.goBack()
+
 
 	def klikNaOtvoriDugme(self):
-	    try:
-	    # otvaranje dijalog prozora za odabir datoteke
-	        self.__dataset = pydicom.read_file(self.path, force = True) # otvaranje DICOM datoteke; force parametar obezbeđuje čitanje nepotpunih datoteka
-	        print(self.__dataset)
 
-	        self.title(self.path)
+		# otvaranje dijalog prozora za odabir datoteke
+		self.__dataset = pydicom.read_file(self.path, force = True) # otvaranje DICOM datoteke; force parametar obezbeđuje čitanje nepotpunih datoteka
+		print(self.__dataset)
 
-	        # podaci DICOM datoteke ne moraju da postoje
-	        if "PatientName" in self.__dataset: # da li podatak postoji u dataset-u?
-	            self.__pacijent.set(self.__dataset.PatientName) # vrednost podatka
-	            self.__pacijentPrisutan.set(True) # podatak pronađen?
-	        else:
-	            self.__pacijentPrisutan.set(False)
+			# self.title(self.path)
+		#try:
+			# podaci DICOM datoteke ne moraju da postoje
+		if "PatientName" in self.__dataset: # da li podatak postoji u dataset-u?
+			self.__pacijentPrisutan.set(True) # podatak pronađen?
+			self.nameVar.set(self.__dataset.PatientName)
+			self.name.set(3)
 
-	        if "PatientSex" in self.__dataset:
-	            for vrednost, tekst in [("M", "muški"), ("F", "ženski"), ("O", "drugi")]: # 3 moguće vrednosti: M, F, O
-	                if vrednost == self.__dataset.PatientSex:
-	                    self.__pol.set(tekst)
-	                    break
-	            self.__polPrisutan.set(True)
-	        else:
-	            self.__polPrisutan.set(False)
+		else:
+			self.__pacijentPrisutan.set(False)
+			self.izsistemaIme.configure(state = tkinter.DISABLED)
+		self.name_entry.config(state = "disabled")
 
-	        if "PatientAge" in self.__dataset:
-	            try:
-	                self.__starost.set(int(self.__dataset.PatientAge[:-1])) # sve do poslednjeg karaktera je vrednost
-	                self.__starostJedinica.set(self.__dataset.PatientAge[-1]) # poslednji karakter je jedinica mere; Y, M, W, D
-	                self.__starostPrisutna.set(True)
-	            except ValueError: # možda podatak postoji, ali ne može da se parsira u int
-	                pass
-	        else:
-	            self.__starostPrisutna.set(False)
+		if "PatientBirthDate" in self.__dataset:
+			self.__pbd.set(True)
+			self.pbd.set(self.dtod(self.__dataset.PatientBirthDate))
+			self.d.set(3)
+		else:
+			self.__pbd.set(False)
+			self.izsistemaDatum1.configure(state = tkinter.DISABLED)
+		self.date_entry.config(state = "disabled")
 
-	        self.azurirajStanja() # omogućavanje polja za izmenu na osnovu pročitanih podataka
-	        print("ziv-1")
-	        pilSlika = pydicom_PIL.get_PIL_image(self.__dataset) # pokušaj dekompresije i čitanja slike iz dataset objekta
-	        print("ziv0")
-	        sirina = pilSlika.width
-	        visina = pilSlika.height
-	        print("originalne dimenzije:", sirina, ",", visina)
+		if "StudyDescription" in self.__dataset: # da li podatak postoji u dataset-u?
+			self.__sd.set(True) # podatak pronađen?
+			self.sd.set(self.__dataset.StudyDescription)
+			self.opt.set(3)
+		else:
+			self.__sd.set(False)
+			self.izsistemaReport.configure(state = tkinter.DISABLED)
+		self.report_entry.config(state = "disabled")
 
-	        maksDimenzija = 900
-	        if sirina > maksDimenzija or visina > maksDimenzija:
-	            if sirina > visina: # smanjiti sliku po većoj od 2 dimenzije
-	                odnos = maksDimenzija/sirina
-	                sirina = maksDimenzija
-	                visina = int(odnos*visina) # manja dimenzija se smanjuje proporcionalno
-	            else:
-	                odnos = maksDimenzija/visina
-	                sirina = int(odnos*sirina) # manja dimenzija se smanjuje proporcionalno
-	                visina = maksDimenzija
-	        print("ziv1")
-	        print("nove dimenzije:", sirina, ",", visina)
-	        pilSlika = pilSlika.resize((sirina, visina), Image.LANCZOS) # LANCZOS metoda je najbolja za smanjivanje slike
-	        slika = ImageTk.PhotoImage(pilSlika) # PIL slika se mora prevesti u TkInter sliku (ImageTk)
-	        self.__slikaLabela["image"] = slika
-	        self.__slikaLabela.image = slika
-	    except:
-	        # PIL slika se mora prevesti u TkInter sliku (ImageTk)
-	        #slika = ImageTk.PhotoImage(Image.new('L', (200, 200))) # crna slika dimenzija 200x200 piksela
-	        slika = ImageTk.PhotoImage(Image.open("DICOM-Logo.jpg")) # bilo koja druga podrazumevana slika
-	        self.__slikaLabela["image"] = slika  # labeli se dodeljuje slika
-	        self.__slikaLabela.image = slika  # referenca na TkInter sliku se mora sačuvati, inače nece biti prikazana!
-	        print("nesto2")
-	    self["cursor"] = "" # reset-ovanje pokazivača miša na podrazumevani
-	    print("nista")
+		if "ReferringPhysicianName" in self.__dataset: # da li podatak postoji u dataset-u?
+			self.__rp.set(True) # podatak pronađen?
+			self.rp.set(self.__dataset.ReferringPhysicianName)
+			self.doc.set(3)
+		else:
+			self.__rp.set(False)
+			self.izsistemaDoctor.configure(state = tkinter.DISABLED)
+		self.doctor_entry.config(state = "disabled")
+
+		if "StudyID" in self.__dataset: # da li podatak postoji u dataset-u?
+			self.__si.set(True) # podatak pronađen?
+			self.si.set(self.__dataset.StudyID)
+			self.id.set(3)
+		else:
+			self.__rp.set(False)
+			self.izsistemaid.configure(state = tkinter.DISABLED)
+		self.id_entry.config(state = "disabled")
+
+		if "StudyDate" in self.__dataset: # da li podatak postoji u dataset-u?
+			self.__sdate.set(True) # podatak pronađen?
+			self.sdate.set(self.dtod(self.__dataset.StudyDate))
+			self.dt.set(3)
+		else:
+			self.__sdate.set(False)
+			self.izsistemaDatum.configure(state = tkinter.DISABLED)
+		self.date2_entry.config(state = "disabled")
+
+		if "PatientID" in self.__dataset: # da li podatak postoji u dataset-u?
+			self.__pi.set(True) # podatak pronađen?
+			self.pi.set(self.__dataset.PatientID)
+			self.lbo.set(3)
+		else:
+			self.__pi.set(False)
+			self.izsistemaLbo.configure(state = tkinter.DISABLED)
+		self.lbo_entry.config(state = "disabled")
+
+
+		# self.azurirajStanja() # omogućavanje polja za izmenu na osnovu pročitanih podataka
+		pilSlika = pydicom_PIL.get_PIL_image(self.__dataset) # pokušaj dekompresije i čitanja slike iz dataset objekta
+		print("ziv0")
+		sirina = pilSlika.width
+		visina = pilSlika.height
+		print("originalne dimenzije:", sirina, ",", visina)
+
+		maksDimenzija = 900
+		if sirina > maksDimenzija or visina > maksDimenzija:
+		    if sirina > visina: # smanjiti sliku po većoj od 2 dimenzije
+		        odnos = maksDimenzija/sirina
+		        sirina = maksDimenzija
+		        visina = int(odnos*visina) # manja dimenzija se smanjuje proporcionalno
+		    else:
+		        odnos = maksDimenzija/visina
+		        sirina = int(odnos*sirina) # manja dimenzija se smanjuje proporcionalno
+		        visina = maksDimenzija
+		print("nove dimenzije:", sirina, ",", visina)
+		pilSlika = pilSlika.resize((sirina, visina), Image.LANCZOS) # LANCZOS metoda je najbolja za smanjivanje slike
+		slika = ImageTk.PhotoImage(pilSlika) # PIL slika se mora prevesti u TkInter sliku (ImageTk)
+		self.__slikaLabela["image"] = slika
+		self.__slikaLabela.image = slika
+	#	except:
+		    # PIL slika se mora prevesti u TkInter sliku (ImageTk)
+		    #slika = ImageTk.PhotoImage(Image.new('L', (200, 200))) # crna slika dimenzija 200x200 piksela
+	#	    slika = ImageTk.PhotoImage(Image.open("DICOM-Logo.jpg")) # bilo koja druga podrazumevana slika
+	#	    self.__slikaLabela["image"] = slika  # labeli se dodeljuje slika
+	#	    self.__slikaLabela.image = slika  # referenca na TkInter sliku se mora sačuvati, inače nece biti prikazana!
