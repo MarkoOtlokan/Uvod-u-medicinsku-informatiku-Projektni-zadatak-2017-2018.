@@ -216,6 +216,7 @@ class DodajPregled(tkinter.Frame):
 		except:
 			return
 		self.route = stazaDoDatoteke
+		self.dicom_entry.delete(0, tkinter.END)
 		self.dicom_entry.insert(tkinter.END,self.route)
 		self.goDic_button.configure(state=tkinter.NORMAL)
 
@@ -447,7 +448,7 @@ class Dicom(tkinter.Frame):
 		self.date_Label = tkinter.Label(self.frame3, text = "datum rodjenja : ").pack(side = tkinter.LEFT)
 		self.date_entry = tkinter.Entry(self.frame3,textvariable = self.pbd)
 		self.date_entry.pack(side = tkinter.LEFT)
-		self.date_Button = ttk.Button(self.frame3, text='Izaberi',command=self.calCal).pack(side = tkinter.LEFT)
+		#self.date_Button = ttk.Button(self.frame3, text='Izaberi',command=self.calCal).pack(side = tkinter.LEFT)
 		self.izostaviDatum1 = tkinter.Radiobutton(self.frame3, text = "izostavi", variable = self.d, value=1, command = self.rucnodate).pack(side = tkinter.LEFT)
 		self.rucnoDatum1 = tkinter.Radiobutton(self.frame3, text="rucno", padx = 10, variable = self.d, value=2,command = lambda: self.date_entry.config(state = "normal")).pack(side = tkinter.LEFT)
 		self.izsistemaDatum1 = tkinter.Radiobutton(self.frame3, text="iz sistema", padx = 10, variable = self.d, value=3,command = self.sistemdate)
@@ -488,7 +489,7 @@ class Dicom(tkinter.Frame):
 		self.date2_Label = tkinter.Label(self.framesec3, text = "datum : ").pack(side = tkinter.LEFT)
 		self.date2_entry = tkinter.Entry(self.framesec3,textvariable = self.sdate)
 		self.date2_entry.pack(side = tkinter.LEFT)
-		self.date2_Button = ttk.Button(self.framesec3, text='Izaberi',command=self.calCal).pack(side = tkinter.LEFT)
+		#self.date2_Button = ttk.Button(self.framesec3, text='Izaberi',command=self.calCal).pack(side = tkinter.LEFT)
 
 
 
@@ -601,12 +602,12 @@ class Dicom(tkinter.Frame):
 		    if date[0]=='':
 		        return ('')
 
-		    newDate = date[2]+'-'+ date[1]+ '-' + date[0]
+		    newDate = date[2]+'.'+ date[1]+ '.' + date[0]
 		    return(newDate)
 		except:
 		    try:
 
-		        newDate = date[0][6:8]+'-'+ date[0][4:6]+ '-' + date[0][0:4]
+		        newDate = date[0][6:8]+'.'+ date[0][4:6]+ '.' + date[0][0:4]
 		        return (newDate)
 		    except:
 
@@ -637,6 +638,36 @@ class Dicom(tkinter.Frame):
 		self.parent.destroy()
 
 	def check(self):
+		tmpLbo = self.lbo_entry.get()
+		if tmpLbo:
+			if(len(tmpLbo) != 11 or tmpLbo.isdigit() == False):
+				messagebox.showinfo("Greska", "Lose unet LBO")
+				return
+		tmpName = self.name_entry.get()
+		if tmpName:
+			if len(tmpName) < 3:
+				messagebox.showinfo("Greska", "Neispravno uneto ime")
+				return
+		tmpReport = self.report_entry.get()
+		if tmpReport:
+			if len(tmpReport) < 3:
+				messagebox.showinfo("Greska", "Neispravno unet izvestaj")
+				return
+
+		Doctor = self.doctor_entry.get()
+		if Doctor:
+			if len(Doctor) < 3:
+				messagebox.showinfo("Greska", "Neispravno unet doktor")
+				return
+
+		id = self.id_entry.get()
+		if id:
+			if len(id) < 3 or id.isdigit() == False:
+				messagebox.showinfo("Greska", "Neispravno unet id")
+				return
+
+
+
 
 		self.__dataset.PatientName = self.name_entry.get() # vrednost podatka
 		self.__dataset.PatientBirthDate = self.date_entry.get()
@@ -645,6 +676,7 @@ class Dicom(tkinter.Frame):
 		self.__dataset.StudyID= self.id_entry.get()
 		self.__dataset.StudyDate = self.date2_entry.get()
 		self.__dataset.PatientID = self.lbo_entry.get()
+
 
 		self.__dataset.save_as(self.path) # čuvanje dataset-a; ako ne postoji, biće kreiran
 		messagebox.showinfo("Uspeh", "Uspesno ste izmenili datoteku")
