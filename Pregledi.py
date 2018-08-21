@@ -4,6 +4,7 @@ import tkinter
 from Patient import Patient
 from MedicalExamination import MedicalExamination
 from AddNew import DodajPregled
+from AddNew import Dicom
 from ChangeMed import ChangeMed
 
 class Pregledi(tkinter.Frame):
@@ -92,9 +93,9 @@ class Pregledi(tkinter.Frame):
 				self.change_button.grid(row = 3, column = 4, sticky = tkinter.W)
 
 	def goToDicom(self, path):
-		self.parent.withdraw()
+		#self.parent.withdraw()
 		self.newWindow = tkinter.Toplevel(self.parent)
-		bb = Dicom(self.newWindow, Main, path)
+		bb = Dicom(self.newWindow, Pregledi, path)
 
 	def dMed(self,id):
 		self.win = tkinter.Toplevel()
